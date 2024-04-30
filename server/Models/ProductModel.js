@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.ObjectId,
     ref: "Category",
   },
   title: {
@@ -30,7 +30,6 @@ const productSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true,
   },
 });
 

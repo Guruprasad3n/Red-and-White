@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
 const connectDB = require("./Config/db");
+const ProductRouter = require("./Routes/ProductRoute");
 const app = express();
 
 app.use(cors());
@@ -15,6 +16,7 @@ app.get("/", async (req, res) => {
         </div>`
   );
 });
+app.use("/api", ProductRouter);
 
 connectDB();
 const PORT = process.env.PORT || 8080;
