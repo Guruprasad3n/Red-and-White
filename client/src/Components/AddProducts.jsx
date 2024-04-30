@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Spinner,
   useDisclosure,
 } from "@chakra-ui/react";
 import toast from "react-hot-toast";
@@ -83,6 +84,9 @@ export default function AddProducts() {
       toast.error("Error creating product");
       console.error("Error creating product:", error);
       setLoading(false);
+    } finally {
+      setLoading(false);
+      toast.error("Error creating product");
     }
   };
 
@@ -113,16 +117,19 @@ export default function AddProducts() {
           return responseData.url.toString();
         } else {
           console.error("Failed to upload image to Cloudinary");
+          toast.error("Failed to upload image to Cloudinary");
           setLoading(false);
           return null;
         }
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
+        toast.error("Error uploading image to Cloudinary");
         setLoading(false);
         return null;
       }
     } else {
       console.error("Image type must be either JPEG or PNG");
+      toast.error("Image type must be either JPEG or PNG");
       setLoading(false);
       return null;
     }
@@ -149,7 +156,7 @@ export default function AddProducts() {
             <FormControl>
               <FormLabel>Title</FormLabel>
               <Input
-                ref={initialRef}
+                type="text"
                 placeholder="Product title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -159,6 +166,7 @@ export default function AddProducts() {
             <FormControl mt={4}>
               <FormLabel>Description</FormLabel>
               <Input
+                type="text"
                 placeholder="Product description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -236,7 +244,7 @@ export default function AddProducts() {
               }}
               isLoading={loading}
             >
-              Save
+              {loading ? <Spinner size="sm" color="white" /> : "Save"}
             </Button>
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>

@@ -9,15 +9,15 @@ function Products() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  console.log(selectedCategory)
+  console.log(selectedCategory);
   const fetchData = async () => {
     try {
-        const url = selectedCategory
-          ? `http://localhost:8000/api/products?category=${selectedCategory}`
-          : "http://localhost:8000/api/products";
-        const res = await axios.get(url);
-        setProducts(res.data.products);
-        setLoading(false);
+      const url = selectedCategory
+        ? `http://localhost:8000/api/products?category=${selectedCategory}`
+        : "http://localhost:8000/api/products";
+      const res = await axios.get(url);
+      setProducts(res.data.products);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
       setLoading(false);
@@ -56,12 +56,11 @@ function Products() {
     );
   };
 
-
   const filteredProducts = selectedCategory
-  ? products.filter((product) => product.category === selectedCategory)
-  : products;
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
 
-console.log("filteredProducts", filteredProducts)
+  console.log("filteredProducts", filteredProducts);
   return (
     <div className="py-4">
       <Container>
@@ -77,7 +76,7 @@ console.log("filteredProducts", filteredProducts)
         ) : (
           <>
             <Categories setSelectedCategory={setSelectedCategory} />
-            <Row className="justify-content-start">
+            <Row className="justify-content-start mb-4">
               {filteredProducts.map((product) => (
                 <Col key={product._id} xs={12} md={6} lg={3}>
                   <Card className="h-100">
