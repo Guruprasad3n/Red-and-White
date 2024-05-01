@@ -93,7 +93,7 @@ export default function AddProducts() {
   const postDetails = async (image) => {
     setLoading(false);
     if (!image) {
-      return null; // Return null if no image is selected
+      return null; 
     }
 
     if (image.type === "image/jpeg" || image.type === "image/png") {

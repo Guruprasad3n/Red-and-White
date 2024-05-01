@@ -3,13 +3,14 @@ import axios from "axios";
 import { Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 import Categories from "./Catrgories";
+import toast from "react-hot-toast";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [productIdsInCart, setProductIdsInCart] = useState([]);
 
-  console.log(selectedCategory);
   const fetchData = async () => {
     try {
       const url = selectedCategory
@@ -19,7 +20,7 @@ function Products() {
       setProducts(res.data.products);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      toast.error("Error fetching products");
       setLoading(false);
     }
   };
@@ -56,11 +57,56 @@ function Products() {
     );
   };
 
+  useEffect(() => {
+    // const fetchCartData = async () => {
+    //   try {
+    //     const cartResponse = await axios.get("http://localhost:8000/api/cart");
+    //     const productIds = cartResponse.data.products.map(
+    //       (product) => productId
+    //     );
+    //     setProductIdsInCart(productIds);
+    //   } catch (error) {
+    //     console.error("Error fetching cart data:", error);
+    //   }
+    // };
+    const fetchCartData = async () => {
+      try {
+        const cartResponse = await axios.get("http://localhost:8000/api/cart");
+        const productIds = cartResponse.data.map((item) => item.productId._id);
+        setProductIdsInCart(productIds);
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    };
+    fetchCartData();
+  }, []);
+
+  const addToCart = async (productId) => {
+    try {
+      const res = await axios.post("http://localhost:8000/api/add-cart", {
+        productId: productId,
+      });
+      if (res.status === 200) {
+        toast.success("Product added to cart");
+      } else if (res.status === 400) {
+        toast.error("Product already in the cart");
+      } else {
+        toast.error("Failed to add product to cart");
+      }
+    } catch (error) {
+      toast.error("Product Already in the Cart");
+    }
+  };
+  const handleAddToCart = (productId) => {
+    addToCart(productId).catch(() => {
+      toast.error("Failed to add product to cart");
+    });
+  };
+
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
-  console.log("filteredProducts", filteredProducts);
   return (
     <div className="py-4">
       <Container>
@@ -96,7 +142,12 @@ function Products() {
                       <Card.Text>{renderRating(product.rating)}</Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                      <Button variant="primary">Add To Cart</Button>
+                      <Button
+                        variant="primary"
+                        onClick={() => handleAddToCart(product._id)}
+                      >
+                        Add To Cart
+                      </Button>
                     </Card.Footer>
                   </Card>
                 </Col>

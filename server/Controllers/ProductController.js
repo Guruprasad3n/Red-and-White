@@ -1,6 +1,3 @@
-const fs = require("fs");
-const cartModel = require("../Models/CartModel");
-
 const Product = require("../Models/ProductModel");
 
 const createProduct = async (req, res) => {
@@ -50,6 +47,24 @@ const createProduct = async (req, res) => {
     return res.status(500).send({ message: "Failed to Create Product" });
   }
 };
+
+const getProductById = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    if (!productId) {
+      return res.status(400).send({ message: "ProductId is required" });
+    }
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
+    }
+    return res.status(200).send({ message: "Product found", product });
+  } catch (err) {
+    console.error("Error fetching product:", err);
+    return res.status(500).send({ message: "Failed to fetch product" });
+  }
+};
+
 const getAllProduct = async (req, res) => {
   try {
     const { category } = req.query;
@@ -72,4 +87,4 @@ const getAllProduct = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, getAllProduct };
+module.exports = { createProduct, getAllProduct, getProductById };

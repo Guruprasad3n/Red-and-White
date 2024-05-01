@@ -21,6 +21,6 @@ app.use("/api", ProductRouter);
 connectDB();
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, (req, res) => {
+app.listen(PORT, async () => {
   console.log(`Server Started at Port No http://localhost:${PORT}`);
 });
