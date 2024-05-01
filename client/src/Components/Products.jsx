@@ -4,6 +4,7 @@ import { Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 import Categories from "./Catrgories";
 import toast from "react-hot-toast";
+import axiosInstance from "../Utils/axiosInstance";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -14,9 +15,9 @@ function Products() {
   const fetchData = async () => {
     try {
       const url = selectedCategory
-        ? `http://localhost:8000/api/products?category=${selectedCategory}`
-        : "http://localhost:8000/api/products";
-      const res = await axios.get(url);
+        ? `api/products?category=${selectedCategory}`
+        : `api/products`;
+      const res = await axiosInstance.get(url);
       setProducts(res.data.products);
       setLoading(false);
     } catch (error) {
@@ -58,20 +59,9 @@ function Products() {
   };
 
   useEffect(() => {
-    // const fetchCartData = async () => {
-    //   try {
-    //     const cartResponse = await axios.get("http://localhost:8000/api/cart");
-    //     const productIds = cartResponse.data.products.map(
-    //       (product) => productId
-    //     );
-    //     setProductIdsInCart(productIds);
-    //   } catch (error) {
-    //     console.error("Error fetching cart data:", error);
-    //   }
-    // };
     const fetchCartData = async () => {
       try {
-        const cartResponse = await axios.get("http://localhost:8000/api/cart");
+        const cartResponse = await axiosInstance.get(`api/cart`);
         const productIds = cartResponse.data.map((item) => item.productId._id);
         setProductIdsInCart(productIds);
       } catch (error) {
@@ -83,7 +73,7 @@ function Products() {
 
   const addToCart = async (productId) => {
     try {
-      const res = await axios.post("http://localhost:8000/api/add-cart", {
+      const res = await axiosInstance.post(`api/add-cart`, {
         productId: productId,
       });
       if (res.status === 200) {

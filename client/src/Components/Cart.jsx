@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Card, Col, Container, Row, Spinner } from "react-bootstrap";
+import axiosInstance from "../Utils/axiosInstance";
 
 function Cart() {
   const [cart, setCart] = useState(null);
@@ -8,7 +9,8 @@ function Cart() {
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/cart");
+      // ${import.meta.env.VITE_KEY}
+      const res = await axiosInstance.get(`api/cart`);
 
       setCart(res.data);
       setLoading(false);
@@ -27,7 +29,7 @@ function Cart() {
       if (newQuantity <= 0) {
         handleRemove(productId);
       } else {
-        await axios.post("http://localhost:8000/api/cart/increment", {
+        await axiosInstance.post("api/cart/increment", {
           productId,
           incrementBy,
         });
@@ -41,7 +43,7 @@ function Cart() {
 
   const handleRemove = async (productId) => {
     try {
-      await axios.delete(`http://localhost:8000/api/cart/${productId._id}`);
+      await axiosInstance.delete(`api/cart/${productId._id}`);
       fetchCart();
     } catch (error) {
       console.error("Error removing item from cart:", error);

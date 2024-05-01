@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import toast from "react-hot-toast";
+import axiosInstance from "../Utils/axiosInstance";
 
 function AddCategories() {
   const [category, setCategory] = useState("");
@@ -13,8 +14,8 @@ function AddCategories() {
   
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/create-category",
+      const res = await axiosInstance.post(
+        `api/create-category`,
         {
           name: category,
         }

@@ -17,6 +17,7 @@ import {
 import toast from "react-hot-toast";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import axiosInstance from "../Utils/axiosInstance";
 
 export default function AddProducts() {
   const [categories, setCategories] = useState([]);
@@ -36,7 +37,7 @@ export default function AddProducts() {
 
   const getCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/categories");
+      const res = await axiosInstance.get(`api/categories`);
       setCategories(res.data.categories);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
@@ -64,7 +65,7 @@ export default function AddProducts() {
         image: imageURL,
       };
 
-      const response = await fetch(`http://localhost:8000/api/create-product`, {
+      const response = await fetch(`https://kryzen-assignment-4d0z.onrender.com/api/create-product`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
