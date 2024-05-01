@@ -25,7 +25,7 @@ function Navigation() {
               </Nav.Link>
             </Nav>
             <Link to="/cart">
-              <FaCartShopping />
+              <FaCartShopping style={{fontSize:"2rem"}} />
             </Link>
           </Navbar.Collapse>
         </Container>
